@@ -11,7 +11,7 @@ class OmdbService {
       Uri.parse('$baseUrl?apiKey=$apiKey&s=$query'),
     );
 
-    if (response == 200) {
+    if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
       if (data['Response'] == "True") {
@@ -21,6 +21,16 @@ class OmdbService {
       }
     } else {
       throw Exception('Gagal terkoneksi ke Server!');
+    }
+  }
+
+  Future<Map<String, dynamic>> getMovieDetail(String imdbID) async {
+    final response = await http.get(Uri.parse('$baseUrl?apikey&i=$imdbID'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception("Gagal terkoneksi ke Server!");
     }
   }
 }

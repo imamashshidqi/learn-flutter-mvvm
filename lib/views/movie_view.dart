@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:flutter_mvvm/view_models/movie_controller.dart';
 
@@ -67,6 +68,7 @@ class MovieView extends GetView<MovieController> {
                     return GestureDetector(
                       onTap: () {
                         // Navigasi ke Detail
+                        Get.toNamed(Routes.detail, arguments: movie.imdbID);
                       },
                       child: Card(
                         elevation: 4,

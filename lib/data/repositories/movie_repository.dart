@@ -1,3 +1,4 @@
+import 'package:flutter_mvvm/models/movie_detail_model.dart';
 import 'package:flutter_mvvm/models/movie_model.dart';
 import 'package:flutter_mvvm/data/services/omdb_service.dart';
 
@@ -11,6 +12,16 @@ class MovieRepository {
     try {
       final rawData = await _omdbService.getMovies(query);
       return rawData.map((json) => Movie.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<MovieDetail> getMovieDetail(String id) async {
+    try {
+      final json = await _omdbService.getMovieDetail(id);
+
+      return MovieDetail.fromJson(json);
     } catch (e) {
       rethrow;
     }
