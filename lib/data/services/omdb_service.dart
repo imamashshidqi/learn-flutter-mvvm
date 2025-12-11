@@ -8,7 +8,7 @@ class OmdbService {
 
   Future<List<dynamic>> getMovies(String query) async {
     final response = await http.get(
-      Uri.parse('$baseUrl?apiKey=$apiKey&s=$query'),
+      Uri.parse('$baseUrl?apikey=$apiKey&s=$query'),
     );
 
     if (response.statusCode == 200) {
@@ -20,17 +20,19 @@ class OmdbService {
         return [];
       }
     } else {
-      throw Exception('Gagal terkoneksi ke Server!');
+      throw Exception('Gagal koneksi ke server');
     }
   }
 
   Future<Map<String, dynamic>> getMovieDetail(String imdbID) async {
-    final response = await http.get(Uri.parse('$baseUrl?apikey&i=$imdbID'));
+    final response = await http.get(
+      Uri.parse('$baseUrl?apikey=$apiKey&i=$imdbID'),
+    );
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception("Gagal terkoneksi ke Server!");
+      throw Exception('Gagal koneksi ke server');
     }
   }
 }

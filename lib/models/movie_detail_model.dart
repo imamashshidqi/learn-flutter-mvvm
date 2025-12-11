@@ -1,5 +1,4 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_mvvm/models/movie_model.dart';
 
 class MovieDetail {
   final String title;
@@ -8,6 +7,7 @@ class MovieDetail {
   final String plot;
   final String director;
   final String genre;
+  final String imdbID;
 
   MovieDetail({
     required this.title,
@@ -16,6 +16,7 @@ class MovieDetail {
     required this.plot,
     required this.director,
     required this.genre,
+    required this.imdbID,
   });
 
   factory MovieDetail.fromJson(Map<String, dynamic> json) {
@@ -28,6 +29,7 @@ class MovieDetail {
       plot: json['Plot'] ?? 'Deskripsi tidak tersedia',
       director: json['Director'] ?? 'N/A',
       genre: json['Genre'] ?? 'N/A',
+      imdbID: json['imdbID'] ?? '',
     );
   }
 }

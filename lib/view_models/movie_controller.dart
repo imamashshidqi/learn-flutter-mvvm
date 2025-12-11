@@ -8,6 +8,7 @@ class MovieController extends GetxController {
   MovieController({required MovieRepository repository})
     : _repository = repository;
 
+  // State
   var movieList = <Movie>[].obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -25,10 +26,10 @@ class MovieController extends GetxController {
         movieList.value = movies;
       } else {
         movieList.clear();
-        errorMessage.value = "Film tidak ditemukan!";
+        errorMessage.value = 'Film tidak ditemukan';
       }
     } catch (e) {
-      errorMessage.value = "Terjadi kesalahan: $e";
+      errorMessage.value = 'Terjadi kesalahan: $e';
     } finally {
       isLoading.value = false;
     }

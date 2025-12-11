@@ -1,6 +1,6 @@
+import 'package:get/get.dart';
 import 'package:flutter_mvvm/data/repositories/movie_repository.dart';
 import 'package:flutter_mvvm/models/movie_detail_model.dart';
-import 'package:get/get.dart';
 
 class MovieDetailController extends GetxController {
   final MovieRepository _repository;
@@ -8,6 +8,7 @@ class MovieDetailController extends GetxController {
   MovieDetailController({required MovieRepository repository})
     : _repository = repository;
 
+  // State
   var isLoading = false.obs;
   var movieDetail = Rxn<MovieDetail>();
   var errorMessage = ''.obs;
@@ -28,9 +29,9 @@ class MovieDetailController extends GetxController {
 
       movieDetail.value = result;
     } catch (e) {
-      errorMessage.value = "Terjadi Kesalahan $e";
+      errorMessage.value = 'Terjadi kesalahan: $e';
     } finally {
-      isLoading.value = true;
+      isLoading.value = false;
     }
   }
 }

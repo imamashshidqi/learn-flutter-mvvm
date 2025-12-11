@@ -14,9 +14,11 @@ class AppPages {
       page: () => MovieView(),
       binding: BindingsBuilder(() {
         Get.lazyPut(() => OmdbService());
+
         Get.lazyPut(
           () => MovieRepository(omdbService: Get.find<OmdbService>()),
         );
+
         Get.lazyPut(
           () => MovieController(repository: Get.find<MovieRepository>()),
         );
