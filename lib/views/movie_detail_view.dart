@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_mvvm/view_models/movie_detail_controller.dart';
+import 'package:flutter_mvvm/routes/app_routes.dart';
 
 class MovieDetailView extends GetView<MovieDetailController> {
   MovieDetailView({super.key});
@@ -29,8 +30,8 @@ class MovieDetailView extends GetView<MovieDetailController> {
           return Center(child: Text(controller.errorMessage.value));
         }
 
-        final movie = controller.movieDetail.value;
-        if (movie == null) return Center(child: Text("Data tidak ditemukan"));
+        final detail = controller.data.value!.movieDetail;
+        final recommendations = controller.data.value!.movieRecommendations;
 
         return SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -45,9 +46,9 @@ class MovieDetailView extends GetView<MovieDetailController> {
                     width: double.infinity,
                     // Menangkap Hero dari halaman sebelumnya
                     child: Hero(
-                      tag: movie.imdbID.isNotEmpty ? movie.imdbID : argImdbID,
+                      tag: detail.imdbID.isNotEmpty ? detail.imdbID : argImdbID,
                       child: Image.network(
-                        movie.poster,
+                        detail.poster,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) =>
                             Container(color: Colors.grey),
@@ -83,7 +84,7 @@ class MovieDetailView extends GetView<MovieDetailController> {
                     children: [
                       // Judul
                       Text(
-                        movie.title,
+                        detail.title,
                         style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -96,7 +97,7 @@ class MovieDetailView extends GetView<MovieDetailController> {
                             color: Colors.grey,
                           ),
                           SizedBox(width: 5),
-                          Text(movie.year),
+                          Text(detail.year),
                           SizedBox(width: 20),
                           Icon(
                             Icons.movie_creation,
@@ -104,7 +105,7 @@ class MovieDetailView extends GetView<MovieDetailController> {
                             color: Colors.grey,
                           ),
                           SizedBox(width: 5),
-                          Text(movie.genre),
+                          Text(detail.genre),
                         ],
                       ),
                       SizedBox(height: 20),
@@ -135,7 +136,7 @@ class MovieDetailView extends GetView<MovieDetailController> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              movie.plot,
+                              detail.plot,
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyMedium?.copyWith(height: 1.5),
@@ -147,6 +148,66 @@ class MovieDetailView extends GetView<MovieDetailController> {
                   ),
                 ),
               ),
+
+              Divider(thickness: 2),
+
+              // --- BAGIAN 2: REKOMENDASI (Hasil Logic Domain Layer) ---
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Film Serupa (${detail.genre.split(',')[0]})",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              Container(
+                height: 200, // Tinggi area scroll horizontal
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal, // Scroll ke samping
+                  itemCount: recommendations.length,
+                  itemBuilder: (context, index) {
+                    final movie = recommendations[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigasi ke detail film rekomendasi tersebut
+                        // Menggunakan preventDuplicates: false agar bisa buka detail di atas detail
+                        Get.offNamed(
+                          Routes.detail,
+                          arguments: movie.imdbID,
+                          preventDuplicates: false,
+                        );
+                      },
+                      child: Container(
+                        width: 120,
+                        margin: EdgeInsets.only(left: 16),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  movie.poster,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              movie.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(height: 20),
             ],
           ),
         );

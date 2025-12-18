@@ -6,6 +6,7 @@ import 'package:flutter_mvvm/view_models/movie_detail_controller.dart';
 import 'package:flutter_mvvm/views/movie_detail_view.dart';
 import 'package:flutter_mvvm/views/movie_view.dart';
 import 'package:get/get.dart';
+import 'package:flutter_mvvm/domain/usecases/movie_recommendations_usecase.dart';
 
 class AppPages {
   static final pages = [
@@ -29,7 +30,14 @@ class AppPages {
       page: () => MovieDetailView(),
       binding: BindingsBuilder(() {
         Get.lazyPut(
-          () => MovieDetailController(repository: Get.find<MovieRepository>()),
+          () => MovieRecommendationsUsecase(
+            repository: Get.find<MovieRepository>(),
+          ),
+        );
+        Get.lazyPut(
+          () => MovieDetailController(
+            useCase: Get.find<MovieRecommendationsUsecase>(),
+          ),
         );
       }),
     ),
